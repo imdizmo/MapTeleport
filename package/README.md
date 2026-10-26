@@ -16,6 +16,9 @@ Client-side; nothing is needed on the server. Works on its own: with Jatify UI i
 
 ## Credits
 
+- Mod loader: [BepInEx](https://github.com/BepInEx/BepInEx).
 - Code: written together with Claude (Anthropic's AI), which shows up as a co-author in the commit history.
+
+MapTeleport is an unofficial, fan-made mod. It is not made, endorsed or supported by Iron Gate AB. Please report MapTeleport bugs [on GitHub](https://github.com/imdizmo/MapTeleport/issues). Valheim is a trademark of Iron Gate AB.
 
 Source: https://github.com/imdizmo/MapTeleport (MIT; the MIT licence covers MapTeleport's own code only)
