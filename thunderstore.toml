@@ -1,0 +1,20 @@
+[config]
+schemaVersion = "0.0.1"
+
+[package]
+namespace = "Jatify"
+name = "MapTeleport"
+versionNumber = "1.1.0"
+description = "GM-style Teleport Here for admins: right-click an empty spot on the map and teleport there. Jatify UI's look when installed, Valheim's otherwise; no cheat flag."
+websiteUrl = "https://github.com/imdizmo/MapTeleport"
+containsNsfwContent = false
+
+[package.dependencies]
+denikson-BepInExPack_Valheim = "5.4.2202"
+
+[publish]
+repository = "https://thunderstore.io"
+communities = ["valheim"]
+
+[publish.categories]
+valheim = ["client-side", "utility"]
