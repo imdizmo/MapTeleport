@@ -1,5 +1,7 @@
 # MapTeleport
 
+[![Join the Discord](https://jatify.com/badges/discord.png)](https://discord.gg/Ru9t2KdfVK) [![Buy me a coffee](https://jatify.com/badges/coffee.png)](https://buymeacoffee.com/imdizmo)
+
 A GM-style **Teleport here** on the map, for server admins.
 
 - Open the large map and **right-click an empty spot**: a small card shows the spot's coordinates and a **Teleport here** button.
