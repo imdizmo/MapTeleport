@@ -22,7 +22,7 @@ namespace Jatify.MapTeleport
             new Harmony(Guid).PatchAll(typeof(Plugin).Assembly);
         }
 
-        private void Update() => Menu.Tick();
+        private void Update() { Menu.Tick(); Instant.Tick(); }
         private void OnDestroy() => Menu.Destroy();
 
         internal static bool CanAdmin
@@ -49,6 +49,43 @@ namespace Jatify.MapTeleport
             if (!Plugin.CanAdmin || Player.m_localPlayer == null) return;
             var world = t.Method("ScreenToWorldPoint", new[] { typeof(Vector3) }).GetValue<Vector3>((Vector3)ZInput.pointerPosition);
             Menu.Open(__instance, world);
+        }
+    }
+
+    // Instant teleport (user: no portal loading screen): you're moved at once and held in the air, unmoving, while the
+    // area loads around you, then set on its ground (a building or rock there too) with no fall damage. Valheim's own
+    // teleport blacks the screen for at least 2 s; this shows the world loading in instead.
+    internal static class Instant
+    {
+        private static Player _p; private static Vector3 _at; private static float _until;
+        private static readonly AccessTools.FieldRef<Character, float> MaxAir = AccessTools.FieldRefAccess<Character, float>("m_maxAirAltitude");
+
+        internal static void Go(Player p, Vector3 dest)
+        {
+            if (p.IsTeleporting()) return;
+            _p = p; _at = dest; _until = Time.time + 30f;   // ponytail: 30 s cap; an area that never loads leaves you where you were put
+            Hold();
+        }
+
+        private static void Hold()
+        {
+            _p.transform.position = _at;
+            var body = _p.GetComponent<Rigidbody>(); if (body != null) { body.position = _at; body.velocity = Vector3.zero; }
+            MaxAir(_p) = _at.y;   // fall damage counts from here
+        }
+
+        internal static void Tick()
+        {
+            if (_p == null) return;
+            if (_p != Player.m_localPlayer || _p.IsDead()) { _p = null; return; }
+            if (ZNetScene.instance == null || !ZNetScene.instance.IsAreaReady(_at))
+            {
+                if (Time.time < _until) { Hold(); return; }
+                Log.Warn("teleport: the area didn't load in 30 s; left you at the spot"); _p = null; return;
+            }
+            // loaded: onto the solid ground there (terrain, a floor, a rock), never under it
+            if (ZoneSystem.instance != null && ZoneSystem.instance.GetSolidHeight(_at, out float h)) _at.y = Mathf.Max(h, ZoneSystem.instance.m_waterLevel) + 0.5f;
+            Hold(); _p = null;
         }
     }
 
@@ -145,12 +182,12 @@ namespace Jatify.MapTeleport
             Close();
             var p = Player.m_localPlayer;
             if (p == null || !Plugin.CanAdmin) return;
-            // Start well above the ground; Valheim's distant teleport waits for the area and drops you onto the floor.
+            // Start a little above the generated ground (or the water); Instant holds you there until the area has loaded.
             float ground = WorldGenerator.instance != null ? WorldGenerator.instance.GetHeight(_target.x, _target.z) : _target.y;
             var dest = new Vector3(_target.x, Mathf.Max(ground, ZoneSystem.instance != null ? ZoneSystem.instance.m_waterLevel : 30f) + 2f, _target.z);
             Log.Info($"teleport to x={dest.x:0} z={dest.z:0}");
             Minimap.instance?.SetMapMode(Minimap.MapMode.Small);
-            p.TeleportTo(dest, p.transform.rotation, distantTeleport: true);
+            Instant.Go(p, dest);
         }
 
         // Closes on Esc, on the map closing, or on a click anywhere outside the card.
