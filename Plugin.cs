@@ -19,11 +19,12 @@ namespace Jatify.MapTeleport
         private void Awake()
         {
             Log.Bind(Logger);
-            new Harmony(Guid).PatchAll(typeof(Plugin).Assembly);
+            _harmony = new Harmony(Guid); _harmony.PatchAll(typeof(Plugin).Assembly);
         }
+        private Harmony _harmony;
 
         private void Update() { Menu.Tick(); Instant.Tick(); }
-        private void OnDestroy() => Menu.Destroy();
+        private void OnDestroy() { Menu.Destroy(); _harmony?.UnpatchSelf(); }   // a reload (ScriptEngine) must not leave the old copy's map hook behind
 
         internal static bool CanAdmin
         {
