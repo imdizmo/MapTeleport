@@ -8,7 +8,7 @@ A GM-style **Teleport here** on the map, for server admins.
 - You arrive at once, with no loading screen: you are held in place while the area loads, then set down on its ground, with no fall damage.
 - Right-clicking a **pin** still removes it, as in vanilla. The menu closes on Esc, a click elsewhere, or when the map closes.
 - **Admins only:** the host, or a player on the server's `adminlist.txt`. Everyone else's map works as usual.
-- Uses the game's own teleport, not the `goto` console command, so the world is not flagged as cheated.
+- Moves you there directly, not with the `goto` console command, so the world is not flagged as cheated.
 
 ![Right-click on the map: the spot's coordinates and Teleport here](https://raw.githubusercontent.com/imdizmo/MapTeleport/main/screenshots/teleport.webp)
 
