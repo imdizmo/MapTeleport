@@ -10,7 +10,7 @@ namespace Jatify.MapTeleport
     // Right-clicking a pin still removes it, as in vanilla. Only for the host or a server admin (adminlist.txt); for
     // everyone else the map behaves as before. Works on its own: with Jatify UI the card has Jatify's look, without it
     // Valheim's (JatifyLook).
-    [BepInPlugin(Guid, "MapTeleport", "1.1.0")]
+    [BepInPlugin(Guid, "MapTeleport", "1.2.0")]
     [BepInDependency("jatify.ui", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {

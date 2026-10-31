@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "Jatify"
 name = "MapTeleport"
-versionNumber = "1.1.0"
+versionNumber = "1.2.0"
 description = "GM-style Teleport Here for admins: right-click an empty spot on the map and teleport there. Jatify UI's look when installed, Valheim's otherwise; no cheat flag."
 websiteUrl = "https://github.com/imdizmo/MapTeleport"
 containsNsfwContent = false
